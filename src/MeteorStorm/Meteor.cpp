@@ -1,10 +1,10 @@
-#include "Enemy.h"
+#include "Meteor.h"
 #include <iostream>
 #include <random>
 #include <SDL3/SDL.h>
 #include "Helpers.h"
 #include "Player.h"
-#include "Snake.h"
+#include "MeteorStorm.h"
 
 	float x;
 	float y;

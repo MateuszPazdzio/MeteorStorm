@@ -2,9 +2,9 @@
 #include <iostream>
 #include <SDL3_ttf/SDL_ttf.h>
 #include "Helpers.h"
-#include "Enemy.h"
+#include "Meteor.h"
 #include "Player.h"
-#include "EnemyController.h"
+#include "MeteorController.h"
 #include "TextureController.h"
 #include "ScoreTexture.h"
 // Screen dimensions
