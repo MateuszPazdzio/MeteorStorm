@@ -1,0 +1,57 @@
+# Visual Studio specific files
+.vs/
+*.vcxproj.user
+*.suo
+*.sln.docstates
+*.ncb
+*.obj
+*.pch
+*.pdb
+*.ilk
+*.ipch
+*.aps
+*.sdf
+*.tlog
+*.log
+*.cache
+*.VC.db
+*.opendb
+*.VC.VC.opendb
+*.vscode/
+
+# Build files
+Debug/
+Release/
+x64/
+x86/
+ARM/
+ARM64/
+*.idb
+*.res
+*.exe
+*.dll
+*.lib
+*.exp
+*.o
+*.a
+*.out
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+CMakeUserPresets.json
+cmake_install.cmake
+CMakeLists.txt.user
+
+# Code analysis
+*.tlog
+*.lastbuildstate
+*.manifest
+*.nativecodeanalysis.xml
+
+# Generated files
+*.sdf
+*.opensdf
+*.iobj
+*.ipdb
+
