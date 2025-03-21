@@ -2,21 +2,21 @@
 #include "Meteor.h"
 #include "Player.h"
 #include <SDL3/SDL.h>
-class EnemyController
+class MeteorController
 {
 private:
-	size_t maxEnemyCount;
-	Enemy* enemyAlive[5]{ nullptr };
+	size_t maxMeteorCount;
+	Meteor* meteorAlive[5]{ nullptr };
 	Player* player;
 public:
 	struct Cord {
 		float x;
 		float y;
 	};
-	EnemyController(size_t maxEnemyCount, Player* player);
+	MeteorController(size_t maxMeteorCount, Player* player);
 	void updatePos(SDL_Renderer* renderer);
-	void generateEnemies();
-	void clearEnemies();
+	void generateMeteors();
+	void clearMeteors();
 	void checkIfAreaOverlapWithPlayer(std::vector<Rocket> rockets);
 };
 

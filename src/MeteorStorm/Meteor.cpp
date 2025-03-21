@@ -11,9 +11,9 @@
 	float w;
 	float h;
 
-	SDL_FRect enemyBody;
+	SDL_FRect meteorBody;
 
-	int Enemy::getRandomEnemyPos(int min, int max, int xOry) {
+	int Meteor::getRandomMeteorPos(int min, int max, int xOry) {
 		float posVal = 0.0f;
 		if (xOry == 0) {
 			posVal = player->getPlayerPosX();
@@ -31,51 +31,51 @@
 		return val;
 	}
 
-	Enemy::Enemy(Player* player) : player(player)
+	Meteor::Meteor(Player* player) : player(player)
 	{
-		x = getRandomEnemyPos(0,750,0);
-		y = getRandomEnemyPos(0,550,1);
+		x = getRandomMeteorPos(0,750,0);
+		y = getRandomMeteorPos(0,550,1);
 		w = 50.0;
 		h = 50.0;
 		// Draw player
-		enemyBody = { x,y,50.0f,50.0f };
+		meteorBody = { x,y,50.0f,50.0f };
 	};
 
-	void Enemy::updatePos(SDL_Renderer* renderer) {
+	void Meteor::updatePos(SDL_Renderer* renderer) {
 		switch (Helpers::getRandomValue(1,4))
 		{
 			case 1: 
-				if (enemyBody.x > 740) {
-					runREnemyRendering(renderer);
+				if (meteorBody.x > 740) {
+					runRMeteorRendering(renderer);
 					return;
 				}
-				enemyBody.x += 10;
+				meteorBody.x += 10;
 				x += 10;
 				break;
 			case 2:
-				if (enemyBody.x < 0) {
-					runREnemyRendering(renderer);
+				if (meteorBody.x < 0) {
+					runRMeteorRendering(renderer);
 					return;
 				}
-				enemyBody.x -= 10;
+				meteorBody.x -= 10;
 				x -= 10;
 				break;
 
 			case 3:
-				if (enemyBody.y > 540) {
-					runREnemyRendering(renderer);
+				if (meteorBody.y > 540) {
+					runRMeteorRendering(renderer);
 					return;
 				}
-				enemyBody.y += 10;
+				meteorBody.y += 10;
 				y += 10;
 				break;
 
 			case 4:
-				if (enemyBody.y < 0) {
-					runREnemyRendering(renderer);
+				if (meteorBody.y < 0) {
+					runRMeteorRendering(renderer);
 					return;
 				}
-				enemyBody.y -= 10;
+				meteorBody.y -= 10;
 				y -= 10;
 				break;
 			//case 2: enemyBody.x -= 10;break;
@@ -83,16 +83,16 @@
 			//case 4: enemyBody.y -= 10;break;
 			default: break;
 		};
-		runREnemyRendering(renderer);
+		runRMeteorRendering(renderer);
 
 	}
 
-	void Enemy::runREnemyRendering(SDL_Renderer* renderer) {
+	void Meteor::runRMeteorRendering(SDL_Renderer* renderer) {
 		SDL_SetRenderDrawColor(renderer, 255, 200, 0, 255);
-		SDL_RenderFillRect(renderer, &enemyBody);
+		SDL_RenderFillRect(renderer, &meteorBody);
 	}
 
-	float Enemy::getX() { return x; }
-	float Enemy::getY()  { return y; }
-	float Enemy::getWidth()  { return w; }
-	float Enemy::getHeight()  { return h; }
+	float Meteor::getX() { return x; }
+	float Meteor::getY()  { return y; }
+	float Meteor::getWidth()  { return w; }
+	float Meteor::getHeight()  { return h; }

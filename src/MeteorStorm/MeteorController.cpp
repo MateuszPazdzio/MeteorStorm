@@ -3,53 +3,53 @@
 #include "Rocket.h"
 #include <SDL3/SDL.h>
 #include <iostream>
-size_t maxEnemyCount;
-Enemy* enemyAlive[5]{ nullptr };
+size_t maxMeteorCount;
+Meteor* meteorAlive[5]{ nullptr };
 Player* player;
 
-EnemyController::EnemyController(size_t maxEnemyCount, Player* player) 
-    : maxEnemyCount(maxEnemyCount), player(player) {
+MeteorController::MeteorController(size_t maxMeteorCount, Player* player)
+    : maxMeteorCount(maxMeteorCount), player(player) {
 
 };
-void EnemyController::updatePos(SDL_Renderer* renderer) {
+void MeteorController::updatePos(SDL_Renderer* renderer) {
     //based on level check enemy count, that are alive
-    int enemyCount = 0;
+    int meteorCount = 0;
 
-    for (auto* enemy : enemyAlive) {
-        if (enemy) enemyCount++;
+    for (auto* meteor : meteorAlive) {
+        if (meteor) meteorCount++;
     }
 
-    //update enemy pos
-    for (auto* enemy : enemyAlive) {
-        if (enemy) enemy->updatePos(renderer);
+    //update meteor pos
+    for (auto* meteor : meteorAlive) {
+        if (meteor) meteor->updatePos(renderer);
     }
 
 
-    if (enemyCount < maxEnemyCount) {
-        int enemyToAdd = maxEnemyCount - enemyCount;
-        for (size_t i = 0; i < maxEnemyCount && enemyToAdd > 0; i++)
+    if (meteorCount < maxMeteorCount) {
+        int meteorToAdd = maxMeteorCount - meteorCount;
+        for (size_t i = 0; i < maxMeteorCount && meteorToAdd > 0; i++)
         {
-            if (enemyAlive[i] == nullptr) {
-                enemyAlive[i] = new Enemy(player);
-                enemyToAdd--;
+            if (meteorAlive[i] == nullptr) {
+                meteorAlive[i] = new Meteor(player);
+                meteorToAdd--;
             }
         }
     }
 }
-void EnemyController::generateEnemies() {
+void MeteorController::generateMeteors() {
 
 }
 
-void clearEnemies() {
-    for (size_t i = 0; i < maxEnemyCount; i++) {
-        if (enemyAlive[i] != nullptr) {
-            delete enemyAlive[i];  // Free memory
-            enemyAlive[i] = nullptr;
+void clearMeteors() {
+    for (size_t i = 0; i < maxMeteorCount; i++) {
+        if (meteorAlive[i] != nullptr) {
+            delete meteorAlive[i];  // Free memory
+            meteorAlive[i] = nullptr;
         }
     }
 }
 
-void EnemyController::checkIfAreaOverlapWithPlayer(std::vector<Rocket> rockets) {
+void MeteorController::checkIfAreaOverlapWithPlayer(std::vector<Rocket> rockets) {
 
     for (auto& rocket : rockets) {
 
@@ -58,20 +58,20 @@ void EnemyController::checkIfAreaOverlapWithPlayer(std::vector<Rocket> rockets) 
         float playerBottom = rocket.getrocketBody().y;
         float playerTop = playerBottom + 25.0f;
 
-        for (auto*& enemy : enemyAlive) {
-            if (!enemy) continue;
+        for (auto*& meteor : meteorAlive) {
+            if (!meteor) continue;
 
-            float enemyLeft = enemy->getX();
-            float enemyRight = enemyLeft + enemy->getWidth();
-            float enemyBottom = enemy->getY();
-            float enemyTop = enemyBottom + enemy->getHeight();
+            float meteorLeft = meteor->getX();
+            float meteorRight = meteorLeft + meteor->getWidth();
+            float meteorBottom = meteor->getY();
+            float meteorTop = meteorBottom + meteor->getHeight();
 
-            if (playerRight > enemyLeft && playerLeft < enemyRight &&
-                playerTop > enemyBottom && playerBottom < enemyTop) {
+            if (playerRight > meteorLeft && playerLeft < meteorRight &&
+                playerTop > meteorBottom && playerBottom < meteorTop) {
                 std::cout << "Touched" << std::endl;
                 player->getTextController()->updateCounterTexture();
-                delete enemy;
-                enemy = nullptr;
+                delete meteor;
+                meteor = nullptr;
             }
         }
     }

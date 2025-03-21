@@ -1,7 +1,7 @@
 #pragma once
 #include <SDL3/SDL.h>
 #include "Player.h"
-class Enemy
+class Meteor
 {
 private:
 	
@@ -9,13 +9,13 @@ private:
 	float y;
 	float w;
 	float h;
-	int getRandomEnemyPos(int min, int max,int xOry);
-	void runREnemyRendering(SDL_Renderer* renderer);
-	SDL_FRect enemyBody;
+	int getRandomMeteorPos(int min, int max,int xOry);
+	void runRMeteorRendering(SDL_Renderer* renderer);
+	SDL_FRect meteorBody;
 	Player* player;
 
 public:
-	Enemy(Player* player);
+	Meteor(Player* player);
 
 	void updatePos(SDL_Renderer* renderer);
 	float getHeight();

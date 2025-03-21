@@ -52,7 +52,7 @@ int main(int argc, char* argv[]) {
 
 
     Player* player = new Player(10, textureController);
-    EnemyController enemyController = EnemyController(5, player);
+    MeteorController meteorController = MeteorController(5, player);
 
     while (running) {
         player->handleInput(running);
@@ -60,11 +60,11 @@ int main(int argc, char* argv[]) {
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
-        enemyController.updatePos(renderer);
+        meteorController.updatePos(renderer);
         player->updateRocketPos(renderer);
         textureController->renderTexture();
 
-        enemyController.checkIfAreaOverlapWithPlayer(player->getRockets());
+        meteorController.checkIfAreaOverlapWithPlayer(player->getRockets());
         // Draw player
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         SDL_RenderFillRect(renderer, player->getPlayer());

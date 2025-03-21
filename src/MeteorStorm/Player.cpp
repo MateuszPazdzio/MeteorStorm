@@ -55,8 +55,6 @@ void Player::updatePos(SDL_Event e) {
     case SDL_SCANCODE_LEFT:  player.x -= speed; player.x; break;
     case SDL_SCANCODE_RIGHT: player.x += speed; player.x; break;
     }
-
-    //textureController->updateCounterTexture();
 }
 
 TextureController* Player::getTextController() {

@@ -4,7 +4,7 @@
 #include <iostream>
 #include "Helpers.h"
 
-int destroyednEnemyCount = 0;
+int destroyednMeteorCount = 0;
 
 ScoreTexture::ScoreTexture(SDL_Renderer* renderer, SDL_FRect textRect, SDL_Color color, TTF_Font* font)
     : Texture(renderer, textRect, color, font) {
@@ -21,15 +21,15 @@ void ScoreTexture::render() {
     SDL_RenderTexture(renderer, textureFromSurface, nullptr, &textRect);
 }
 
-void ScoreTexture::updateDestroyedEnemyCount() {
+void ScoreTexture::updateDestroyedMeteorCount() {
 
     if (textureFromSurface) {
         SDL_DestroyTexture(textureFromSurface);
         textureFromSurface = nullptr;
     }
-    destroyednEnemyCount += 1;
+    destroyednMeteorCount += 1;
 
-    std::string newTextVal = "Score: "+ Helpers::GetString(destroyednEnemyCount);
+    std::string newTextVal = "Score: "+ Helpers::GetString(destroyednMeteorCount);
     SDL_Surface* surface = TTF_RenderText_Solid(font, newTextVal.c_str(), 16, color);
     if (!surface) {
         std::cerr << "Failed to render text surface!";

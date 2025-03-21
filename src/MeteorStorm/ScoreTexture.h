@@ -11,7 +11,7 @@ public:
     // Implementation of the pure virtual function
     void render() override;
     void createTexture() override;
-    void updateDestroyedEnemyCount();
+    void updateDestroyedMeteorCount();
 
 private:
     SDL_Texture* textureFromSurface;
