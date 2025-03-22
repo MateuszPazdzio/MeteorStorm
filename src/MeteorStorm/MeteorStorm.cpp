@@ -7,6 +7,8 @@
 #include "MeteorController.h"
 #include "TextureController.h"
 #include "ScoreTexture.h"
+#include "CollisionController.h"
+
 // Screen dimensions
 const float SCREEN_WIDTH = 800;
 const float SCREEN_HEIGHT = 600;
@@ -52,19 +54,26 @@ int main(int argc, char* argv[]) {
 
 
     Player* player = new Player(10, textureController);
-    MeteorController meteorController = MeteorController(5, player);
-
+    MeteorController* meteorController = new MeteorController(5, player);
+    CollisionController* collisionController = new CollisionController();
     while (running) {
         player->handleInput(running);
         // Clear screen once
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
-        meteorController.updatePos(renderer);
+        meteorController->updatePos(renderer);
         player->updateRocketPos(renderer);
         textureController->renderTexture();
+        bool meteorCollidedWithPlayer = collisionController->verifyMeteorCollisions(renderer, textureController, player, meteorController);
 
-        meteorController.checkIfAreaOverlapWithPlayer(player->getRockets());
+        if (meteorCollidedWithPlayer) {
+            textureController->ShowEndGameScreen();
+        }
+    /*    meteorController.checkIfAreaOfMeteorOverlapsWithRocket(player->getRockets());
+        if (meteorController.checkIfAreaOfMeteorOverlapsWithPlayer()) {
+            break;
+        }*/
         // Draw player
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         SDL_RenderFillRect(renderer, player->getPlayer());

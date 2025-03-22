@@ -153,6 +153,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CollisionController.h" />
+    <ClInclude Include="GameOverTexture.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="Meteor.h" />
     <ClInclude Include="MeteorController.h" />
     <ClInclude Include="Helpers.h" />
@@ -164,6 +167,9 @@
     <ClInclude Include="TextureController.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CollisionController.cpp" />
+    <ClCompile Include="GameOverTexture.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Meteor.cpp" />
     <ClCompile Include="MeteorController.cpp" />
     <ClCompile Include="Helpers.cpp" />

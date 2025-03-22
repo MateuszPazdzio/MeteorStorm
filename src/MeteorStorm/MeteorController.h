@@ -17,6 +17,8 @@ public:
 	void updatePos(SDL_Renderer* renderer);
 	void generateMeteors();
 	void clearMeteors();
-	void checkIfAreaOverlapWithPlayer(std::vector<Rocket> rockets);
+	void checkIfAreaOfMeteorOverlapsWithRocket(std::vector<Rocket> rockets);
+	bool checkIfAreaOfMeteorOverlapsWithPlayer();
+	Meteor** getMeteors();
 };
 

@@ -11,6 +11,11 @@ MeteorController::MeteorController(size_t maxMeteorCount, Player* player)
     : maxMeteorCount(maxMeteorCount), player(player) {
 
 };
+
+Meteor** MeteorController::getMeteors() {
+    return meteorAlive;
+};
+
 void MeteorController::updatePos(SDL_Renderer* renderer) {
     //based on level check enemy count, that are alive
     int meteorCount = 0;
@@ -48,15 +53,46 @@ void clearMeteors() {
         }
     }
 }
+//dodac texture game over i sprzatniecie ca³ej zawartosci ekranu w momencie jej wyswieltenia, jezeli naciskasz Enter to gra leci na nowo
+/*To DO: wygenerowac teksture petli ktora zmiata wszystkie rzeczy i reaguje tylko ne enter lub ESC - dodac do TextureController EndGameTexture, rozwazyc
+czy texture powienien miec pole z nazwa ekranu na ktorej ma sie wyswieltac. wtedy moglyby byc renderowane tylko te teksture z vectora ktore sa widoczne na danym
+ekranie.*/
 
-void MeteorController::checkIfAreaOverlapWithPlayer(std::vector<Rocket> rockets) {
+bool MeteorController::checkIfAreaOfMeteorOverlapsWithPlayer() {
+
+    float playerLeft = player->getX();
+    float playerRight = playerLeft + player->getWidth();
+    float playerBottom = player->getY();
+    float playerTop = playerBottom + player->getHeight();
+
+    bool playerHit = false;
+
+    for (auto*& meteor : meteorAlive) {
+        if (!meteor) continue;
+
+        float meteorLeft = meteor->getX();
+        float meteorRight = meteorLeft + meteor->getWidth();
+        float meteorBottom = meteor->getY();
+        float meteorTop = meteorBottom + meteor->getHeight();
+
+        if (playerRight > meteorLeft && playerLeft < meteorRight &&
+            playerTop > meteorBottom && playerBottom < meteorTop) {
+            std::cout << "Touched a player" << std::endl;
+            playerHit = true;
+            break;
+        }
+    }
+
+    return playerHit;
+}
+void MeteorController::checkIfAreaOfMeteorOverlapsWithRocket(std::vector<Rocket> rockets) {
 
     for (auto& rocket : rockets) {
 
-        float playerLeft = rocket.getrocketBody().x;
-        float playerRight = playerLeft + 25.0f;
-        float playerBottom = rocket.getrocketBody().y;
-        float playerTop = playerBottom + 25.0f;
+        float rocketLeft = rocket.getrocketBody().x;
+        float rocketRight = rocketLeft + 25.0f;
+        float rocketBottom = rocket.getrocketBody().y;
+        float rocketTop = rocketBottom + 25.0f;
 
         for (auto*& meteor : meteorAlive) {
             if (!meteor) continue;
@@ -66,8 +102,8 @@ void MeteorController::checkIfAreaOverlapWithPlayer(std::vector<Rocket> rockets)
             float meteorBottom = meteor->getY();
             float meteorTop = meteorBottom + meteor->getHeight();
 
-            if (playerRight > meteorLeft && playerLeft < meteorRight &&
-                playerTop > meteorBottom && playerBottom < meteorTop) {
+            if (rocketRight > meteorLeft && rocketLeft < meteorRight &&
+                rocketTop > meteorBottom && rocketBottom < meteorTop) {
                 std::cout << "Touched" << std::endl;
                 player->getTextController()->updateCounterTexture();
                 delete meteor;

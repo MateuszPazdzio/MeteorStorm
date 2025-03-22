@@ -16,10 +16,10 @@
 	int Meteor::getRandomMeteorPos(int min, int max, int xOry) {
 		float posVal = 0.0f;
 		if (xOry == 0) {
-			posVal = player->getPlayerPosX();
+			posVal = player->getX();
 		}
 		else {
-			posVal = player->getPlayerPosY();
+			posVal = player->getY();
 		}
 		int val = -1;
 		float diff = 0.0f;
