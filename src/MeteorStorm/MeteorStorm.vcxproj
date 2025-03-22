@@ -153,26 +153,32 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Enemy.h" />
-    <ClInclude Include="EnemyController.h" />
+    <ClInclude Include="CollisionController.h" />
+    <ClInclude Include="GameOverTexture.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Meteor.h" />
+    <ClInclude Include="MeteorController.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Rocket.h" />
     <ClInclude Include="ScoreTexture.h" />
-    <ClInclude Include="Snake.h" />
+    <ClInclude Include="MeteorStorm.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureController.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="EnemyController.cpp" />
+    <ClCompile Include="CollisionController.cpp" />
+    <ClCompile Include="GameOverTexture.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Meteor.cpp" />
+    <ClCompile Include="MeteorController.cpp" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Rocket.cpp" />
     <ClCompile Include="ScoreTexture.cpp" />
-    <ClCompile Include="Snake.cpp" />
+    <ClCompile Include="MeteorStorm.cpp" />
     <ClCompile Include="TextureController.cpp" />
-    <ClCompile Include="Texturecpp.cpp" />
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\SDL_ttf-main\VisualC\SDL_ttf.vcxproj">

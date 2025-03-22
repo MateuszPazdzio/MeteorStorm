@@ -16,7 +16,7 @@ void TextureController::addTexture(Texture* texture) {
 void TextureController::updateCounterTexture() {
     if (!textures.empty() && textures[0]) {
         ScoreTexture* sT = dynamic_cast<ScoreTexture*>(textures[0]);
-        sT->updateDestroyedEnemyCount();
+        sT->updateDestroyedMeteorCount();
     }
 }
 void TextureController::renderTexture() {

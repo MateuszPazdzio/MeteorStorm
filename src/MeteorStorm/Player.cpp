@@ -8,7 +8,7 @@
 int speed;
 SDL_FRect player;
 SDL_Event event;
-std::vector<Rocket> rockets;
+std::vector<Rocket*> rockets;
 Dir playerDir = Dir::LEFT;
 
 const float SCREEN_WIDTH = 800;
@@ -41,7 +41,10 @@ void Player::handleInput(bool& running) {
                 /// <summary>
                 ///move to Rocket Controller since it is neccesery to rotate warfare
                 /// </summary>
-                createRocket(player.x + 25, player.y + 25);
+                //TO DO: apply for rocket build strategy size
+                float rocketWidth = 25.0f;
+                float rocketHeight = 25.0f;
+                createRocket(player.x + 25, player.y + 25, rocketWidth, rocketHeight);
             }
         }
     }
@@ -55,60 +58,58 @@ void Player::updatePos(SDL_Event e) {
     case SDL_SCANCODE_LEFT:  player.x -= speed; player.x; break;
     case SDL_SCANCODE_RIGHT: player.x += speed; player.x; break;
     }
-
-    //textureController->updateCounterTexture();
 }
 
 TextureController* Player::getTextController() {
     return textureController;
 }
 
-std::vector<Rocket> Player::getRockets() {
+std::vector<Rocket*> Player::getRockets() {
     return rockets;
 }
-float Player::getPlayerPosX() {
+
+float Player::getX() {
     return player.x;
 }
 
-float Player::getPlayerPosY() {
+float Player::getY() {
     return player.y;
 }
 
-float Player::getPlayerWidth() {
+float Player::getWidth() {
     return player.w;
 }
-float Player::getPlayerHeight() {
+float Player::getHeight() {
     return player.h;
 }
 SDL_FRect* Player::getPlayer() {
     return &player;
 }
 
-void Player::createRocket(float startX, float startY) {
-    rockets.push_back(Rocket(startX, startY, playerDir));
+void Player::createRocket(float startX, float startY, float rocketWidth, float  rocketHeight) {
+    rockets.push_back(new Rocket(startX, startY, playerDir, rocketWidth, rocketHeight));
 }
 
 void Player::updateRocketPos(SDL_Renderer* renderer) {
-    for (auto& rocket : rockets) {
-        rocket.updatePos(renderer);
-        SDL_FRect rocketBody = rocket.getrocketBody();
+    for (Rocket* rocket : rockets) {
+        rocket->updatePos(renderer);
+        SDL_FRect rocketBody = rocket->getrocketBody();
         if ((rocketBody.x + rocketBody.w) > SCREEN_WIDTH || (rocketBody.x < 0) || (rocketBody.y - rocketBody.h) > SCREEN_HEIGHT || (rocketBody.y < 0)) {
-             int rocketToDeleteId = rocket.getRocketId();
-
-            std::cout << "Removing Rocket ID: " << rocket.getRocketId() << std::endl;
-
-            auto it = std::find(rockets.begin(), rockets.end(), rocket);
-            int rocketIdx = 0;
-            if (it!=rockets.end()) {
-                rocketIdx = std::distance(rockets.begin(), it);
-            }
-            rockets.erase(rockets.begin() + rocketIdx);
+            removeRocket(rocket);
         }
     }
-
-
-
 }
+//Rocket has been destroyes or moved out of screen
+void Player::removeRocket(Rocket* rocket) {
+
+    int rocketToDeleteId = rocket->getRocketId();
+
+    std::cout << "Removing Rocket ID: " << rocket->getRocketId() << std::endl;
+    auto it = std::find(rockets.begin(), rockets.end(), rocket);
+    delete* it;
+    rockets.erase(it);
+}
+
 void Player::rotatePlayer(SDL_Event e) {
     switch (e.key.scancode) {
         case SDL_SCANCODE_1:    playerDir = Dir::UP; break;

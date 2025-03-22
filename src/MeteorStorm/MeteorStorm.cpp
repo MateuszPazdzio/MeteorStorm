@@ -2,11 +2,13 @@
 #include <iostream>
 #include <SDL3_ttf/SDL_ttf.h>
 #include "Helpers.h"
-#include "Enemy.h"
+#include "Meteor.h"
 #include "Player.h"
-#include "EnemyController.h"
+#include "MeteorController.h"
 #include "TextureController.h"
 #include "ScoreTexture.h"
+#include "CollisionController.h"
+
 // Screen dimensions
 const float SCREEN_WIDTH = 800;
 const float SCREEN_HEIGHT = 600;
@@ -52,19 +54,26 @@ int main(int argc, char* argv[]) {
 
 
     Player* player = new Player(10, textureController);
-    EnemyController enemyController = EnemyController(5, player);
-
+    MeteorController* meteorController = new MeteorController(5, player);
+    CollisionController* collisionController = new CollisionController();
     while (running) {
         player->handleInput(running);
         // Clear screen once
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
-        enemyController.updatePos(renderer);
+        meteorController->updatePos(renderer);
         player->updateRocketPos(renderer);
         textureController->renderTexture();
+        bool meteorCollidedWithPlayer = collisionController->verifyMeteorCollisions(renderer, textureController, player, meteorController);
 
-        enemyController.checkIfAreaOverlapWithPlayer(player->getRockets());
+        if (meteorCollidedWithPlayer) {
+            textureController->ShowEndGameScreen();
+        }
+    /*    meteorController.checkIfAreaOfMeteorOverlapsWithRocket(player->getRockets());
+        if (meteorController.checkIfAreaOfMeteorOverlapsWithPlayer()) {
+            break;
+        }*/
         // Draw player
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         SDL_RenderFillRect(renderer, player->getPlayer());
