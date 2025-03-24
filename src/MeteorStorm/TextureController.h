@@ -15,5 +15,7 @@ public:
 	void renderTexture();
 	void addTexture(Texture* texture);
 	void updateCounterTexture();
+	void showEndGameScreen(SDL_Renderer* renderer);
+	void clear();
 };
 

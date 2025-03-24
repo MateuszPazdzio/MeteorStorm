@@ -14,3 +14,10 @@ std::string Helpers::GetString(int val) {
     ss << val;
     return ss.str();
 }
+
+void Helpers::countCharsInString(const char* str, int& count) {
+    while (*str) {
+        count++;
+        str += 1;
+    }
+}

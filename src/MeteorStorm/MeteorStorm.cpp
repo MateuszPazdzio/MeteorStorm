@@ -13,7 +13,7 @@
 const float SCREEN_WIDTH = 800;
 const float SCREEN_HEIGHT = 600;
 
-float speed = 50.0f;
+float speed = 150.0f;
 SDL_Renderer* renderer = { nullptr };
 
 int main(int argc, char* argv[]) {
@@ -39,23 +39,24 @@ int main(int argc, char* argv[]) {
     if (TTF_Init() == -1) {
         return -1;
     }
-
+    Player* player;
+    TextureController* textureController;
+    ScoreTexture* sT;
+    MeteorController* meteorController;
+    CollisionController* collisionController;
 
     bool running = true;
     Uint32 lastTime = SDL_GetTicks();
-    TextureController* textureController = new TextureController(renderer);
+    textureController = new TextureController(renderer);
     //renderer, location ,white font, font
-    ScoreTexture* sT = new ScoreTexture(renderer, { 50, 50, 70.0f, 50.0f }, { 255, 255, 255, 255 }, TTF_OpenFont("../assets/OpenSans.ttf", 24));
+    sT = new ScoreTexture(renderer,"Score: 0", { 50, 50, 70.0f, 50.0f }, {255, 255, 255, 255}, TTF_OpenFont("../assets/OpenSans.ttf", 24));
 
     textureController->addTexture(sT);
 
+    player = new Player(10, textureController);
+    meteorController = new MeteorController(5, player);
+    collisionController = new CollisionController();
 
-
-
-
-    Player* player = new Player(10, textureController);
-    MeteorController* meteorController = new MeteorController(5, player);
-    CollisionController* collisionController = new CollisionController();
     while (running) {
         player->handleInput(running);
         // Clear screen once
@@ -68,7 +69,21 @@ int main(int argc, char* argv[]) {
         bool meteorCollidedWithPlayer = collisionController->verifyMeteorCollisions(renderer, textureController, player, meteorController);
 
         if (meteorCollidedWithPlayer) {
-            textureController->ShowEndGameScreen();
+            textureController->showEndGameScreen(renderer);
+            delete player;
+            delete meteorController;
+            delete collisionController;
+            delete textureController;
+
+            textureController = new TextureController(renderer);
+            sT = new ScoreTexture(renderer,"Score: 0", { 50, 50, 70.0f, 50.0f }, {255, 255, 255, 255}, TTF_OpenFont("../assets/OpenSans.ttf", 24));
+            textureController->addTexture(sT);
+            player = new Player(10, textureController);
+            meteorController = new MeteorController(5, player);
+            collisionController = new CollisionController();
+
+            continue;
+
         }
     /*    meteorController.checkIfAreaOfMeteorOverlapsWithRocket(player->getRockets());
         if (meteorController.checkIfAreaOfMeteorOverlapsWithPlayer()) {
@@ -88,3 +103,4 @@ int main(int argc, char* argv[]) {
     SDL_Quit();
     return 0;
 }
+

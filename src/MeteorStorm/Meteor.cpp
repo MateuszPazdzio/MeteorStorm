@@ -23,7 +23,7 @@
 		}
 		int val = -1;
 		float diff = 0.0f;
-		while (val == -1 && diff < 60) {
+		while (val == -1 || diff < 100) {
 			val = Helpers::getRandomValue(min, max);
 			diff = std::abs(posVal - val);
 		}
