@@ -61,7 +61,7 @@ void TextureController::showEndGameScreen(SDL_Renderer* renderer) {
                 if (event.key.scancode == SDL_SCANCODE_ESCAPE) {
                     tryAgain = false;
                 }
-                if (event.key.scancode == SDL_SCANCODE_SPACE) {
+                if (event.key.scancode == SDL_SCANCODE_KP_ENTER) {
                     tryAgain = true;
                 }
             }

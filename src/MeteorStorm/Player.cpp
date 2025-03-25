@@ -40,6 +40,9 @@ void Player::handleInput(bool& running) {
                 rotatePlayer(event);
             }
 
+        }
+
+        if (event.type == SDL_EVENT_KEY_UP) {
             if (event.key.scancode == SDL_SCANCODE_SPACE) {
                 /// <summary>
                 ///move to Rocket Controller since it is neccesery to rotate warfare
@@ -48,6 +51,7 @@ void Player::handleInput(bool& running) {
                 float rocketWidth = 25.0f;
                 float rocketHeight = 25.0f;
                 createRocket(player.x + 25, player.y + 25, rocketWidth, rocketHeight);
+
             }
         }
     }
