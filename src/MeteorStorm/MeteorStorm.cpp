@@ -59,6 +59,7 @@ int main(int argc, char* argv[]) {
 
     while (running) {
         player->handleInput(running);
+        player->updatePos();
         // Clear screen once
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);

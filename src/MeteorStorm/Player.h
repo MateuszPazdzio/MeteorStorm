@@ -31,6 +31,7 @@ public:
 	void rotatePlayer(SDL_Event e);
 	TextureController* getTextController();
 	void removeRocket(Rocket* rocket);
+	void updatePos();
 };
 
 
