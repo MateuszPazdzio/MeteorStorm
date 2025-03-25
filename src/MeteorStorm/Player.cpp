@@ -27,7 +27,10 @@ void Player::handleInput(bool& running) {
         }
 
         if (event.type == SDL_EVENT_KEY_DOWN) {
-            if (event.key.scancode == SDL_SCANCODE_UP || event.key.scancode == SDL_SCANCODE_DOWN || event.key.scancode == SDL_SCANCODE_LEFT || event.key.scancode == SDL_SCANCODE_RIGHT) {
+            if (event.key.scancode == SDL_SCANCODE_UP ||
+                event.key.scancode == SDL_SCANCODE_DOWN ||
+                event.key.scancode == SDL_SCANCODE_LEFT ||
+                event.key.scancode == SDL_SCANCODE_RIGHT) {
                 updatePos(event);
             }
             if (event.key.scancode == SDL_SCANCODE_1 ||
@@ -52,11 +55,33 @@ void Player::handleInput(bool& running) {
 
 void Player::updatePos(SDL_Event e) {
 
+    float yCopy = player.y;
+    float xCopy = player.x;
+
     switch (e.key.scancode) {
-    case SDL_SCANCODE_UP:    player.y -= speed; player.y; break;
-    case SDL_SCANCODE_DOWN:  player.y += speed; player.y; break;
-    case SDL_SCANCODE_LEFT:  player.x -= speed; player.x; break;
-    case SDL_SCANCODE_RIGHT: player.x += speed; player.x; break;
+        case SDL_SCANCODE_UP:
+            if ((yCopy - speed) >= 0) {
+                player.y -= speed;
+            }
+            break;
+
+        case SDL_SCANCODE_DOWN:
+            if ((yCopy + speed) <= (SCREEN_HEIGHT - player.h)) {
+                player.y += speed;
+            }
+            break;
+
+        case SDL_SCANCODE_LEFT:
+            if ((xCopy - speed) >= 0) {
+                player.x -= speed;
+            }
+            break;
+
+        case SDL_SCANCODE_RIGHT:
+            if ((xCopy + speed) <= (SCREEN_WIDTH - player.w)) {
+                player.x += speed;
+            }
+            break;
     }
 }
 
