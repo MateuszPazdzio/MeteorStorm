@@ -8,6 +8,7 @@
 #include "ScoreTexture.h"
 #include "CollisionController.h"
 #include "GameObject.h"
+#include <set>
 
 bool CollisionController::verifyMeteorCollisions(SDL_Renderer* renderer, TextureController* textureController, Player* player, MeteorController* meteorController) {
 

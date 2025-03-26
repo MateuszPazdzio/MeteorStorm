@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include <iostream>
 #include <vector>
+#include <set>
 
 class Player : public GameObject
 {
@@ -15,6 +16,7 @@ private:
 	SDL_Event event;
 	TextureController* textureController;
 	std::vector<Rocket*> rockets;
+	std::set<SDL_Scancode> pressedKeys;
 
 public:
 
@@ -32,6 +34,7 @@ public:
 	TextureController* getTextController();
 	void removeRocket(Rocket* rocket);
 	void updatePos();
+	std::set<SDL_Scancode> getPressedKeys();
 };
 
 

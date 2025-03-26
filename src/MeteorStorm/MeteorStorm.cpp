@@ -71,6 +71,7 @@ int main(int argc, char* argv[]) {
 
         if (meteorCollidedWithPlayer) {
             textureController->showEndGameScreen(renderer);
+            player->getPressedKeys().clear();
             delete player;
             delete meteorController;
             delete collisionController;

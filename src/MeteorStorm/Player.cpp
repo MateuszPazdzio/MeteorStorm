@@ -11,7 +11,6 @@ SDL_FRect player;
 SDL_Event event;
 std::vector<Rocket*> rockets;
 Dir playerDir = Dir::LEFT;
-std::set<SDL_Scancode> pressedKeys;
 
 const float SCREEN_WIDTH = 800;
 const float SCREEN_HEIGHT = 600;
@@ -194,4 +193,8 @@ void Player::rotatePlayer(SDL_Event e) {
         case SDL_SCANCODE_3:  playerDir = Dir::DOWN; break;
         case SDL_SCANCODE_4:  playerDir = Dir::LEFT; break;
     }
+}
+
+std::set<SDL_Scancode> Player::getPressedKeys() {
+    return pressedKeys;
 }
