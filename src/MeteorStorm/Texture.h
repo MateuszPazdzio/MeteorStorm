@@ -7,7 +7,7 @@ class Texture
 {
 public:
 	//Texture();
-    Texture(SDL_Renderer* renderer, SDL_FRect textRect, SDL_Color color, TTF_Font* font);
+    Texture(SDL_Renderer* renderer, std::string text, SDL_FRect textRect, SDL_Color color, TTF_Font* font);
 	virtual ~Texture() = default;
 	virtual void render() = 0;
 	virtual void createTexture() = 0;
@@ -17,5 +17,6 @@ protected:
 	TTF_Font* font;
 	SDL_FRect textRect;
 	SDL_Color color;
+	std::string text;
 };
 

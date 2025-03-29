@@ -1,8 +1,12 @@
 #include "MeteorController.h"
 #include "Meteor.h"
 #include "Rocket.h"
+#include "Helpers.h"
 #include <SDL3/SDL.h>
 #include <iostream>
+#include <cmath>
+#include "MeteorStorm.h"
+
 size_t maxMeteorCount;
 Meteor* meteorAlive[5]{ nullptr };
 Player* player;
@@ -35,7 +39,9 @@ void MeteorController::updatePos(SDL_Renderer* renderer) {
         for (size_t i = 0; i < maxMeteorCount && meteorToAdd > 0; i++)
         {
             if (meteorAlive[i] == nullptr) {
-                meteorAlive[i] = new Meteor(player);
+                int predatorTreshold = std::ceil(PREDATOR_METEOR_RATIO * maxMeteorCount);
+                bool meteorWantsToACollisionWithPlayer = Helpers::getRandomValue(1, maxMeteorCount) < predatorTreshold ? true: false;
+                meteorAlive[i] = new Meteor(player, meteorWantsToACollisionWithPlayer);
                 meteorToAdd--;
             }
         }

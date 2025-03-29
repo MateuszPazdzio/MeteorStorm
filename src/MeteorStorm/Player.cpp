@@ -1,9 +1,11 @@
 #include <SDL3/SDL.h>
 #include "Player.h"
+#include "Helpers.h"
 #include "TextureController.h"
 #include <algorithm>
 #include <iostream>
 #include <vector>
+#include <set>
 
 int speed;
 SDL_FRect player;
@@ -15,27 +17,38 @@ const float SCREEN_WIDTH = 800;
 const float SCREEN_HEIGHT = 600;
 
 Player::Player(int s, TextureController* textureController) : speed(s), textureController(textureController) {
-    player = { 200.0f, 200.0f, 50.0f, 50.0f };
+    player = { (float)Helpers::getRandomValue(0, 750), (float)Helpers::getRandomValue(0, 550), 50.0f, 50.0f };
 }
-
 void Player::handleInput(bool& running) {
-
     while (SDL_PollEvent(&event)) {
-
         if (event.type == SDL_EVENT_QUIT) {
             running = false;
         }
 
         if (event.type == SDL_EVENT_KEY_DOWN) {
-            if (event.key.scancode == SDL_SCANCODE_UP || event.key.scancode == SDL_SCANCODE_DOWN || event.key.scancode == SDL_SCANCODE_LEFT || event.key.scancode == SDL_SCANCODE_RIGHT) {
-                updatePos(event);
-            }
+            pressedKeys.insert(event.key.scancode);  // Add pressed key
+        }
+
+        if (event.type == SDL_EVENT_KEY_UP) {
+            pressedKeys.erase(event.key.scancode);  // Remove ONLY the released key
+        }
+
+        if (event.type == SDL_EVENT_KEY_DOWN) {
+
+
             if (event.key.scancode == SDL_SCANCODE_1 ||
                 event.key.scancode == SDL_SCANCODE_2 ||
                 event.key.scancode == SDL_SCANCODE_3 ||
                 event.key.scancode == SDL_SCANCODE_4) {
                 rotatePlayer(event);
             }
+
+        }
+
+        if (event.type == SDL_EVENT_KEY_UP) {
+
+            //pressedKeysEvents.erase(event.key.scancode);
+            //pressedKeys.erase(event.key.scancode);
 
             if (event.key.scancode == SDL_SCANCODE_SPACE) {
                 /// <summary>
@@ -45,18 +58,82 @@ void Player::handleInput(bool& running) {
                 float rocketWidth = 25.0f;
                 float rocketHeight = 25.0f;
                 createRocket(player.x + 25, player.y + 25, rocketWidth, rocketHeight);
+
             }
         }
     }
 }
+//void Player::handleInput(bool& running) {
+//
+//    while (SDL_PollEvent(&event)) {
+//
+//        if (event.type == SDL_EVENT_QUIT) {
+//            running = false;
+//        }
+//
+//        if (event.type == SDL_EVENT_KEY_DOWN) {
+//
+//            //pressedKeysEvents.insert(event.key.scancode);
+//            float yCopy = player.y;
+//            float xCopy = player.x;
+//            pressedKeys.insert(event.key.scancode);
+//
+//
+//            for (auto event : pressedKeys) {
+//                updatePos2(event);
+//            }
+//            //if (event.key.scancode == SDL_SCANCODE_UP ||
+//            //    event.key.scancode == SDL_SCANCODE_DOWN ||
+//            //    event.key.scancode == SDL_SCANCODE_LEFT ||
+//            //    event.key.scancode == SDL_SCANCODE_RIGHT) {
+//
+//            //    updatePos(event);
+//            //}
+//
+//            if (event.key.scancode == SDL_SCANCODE_1 ||
+//                event.key.scancode == SDL_SCANCODE_2 ||
+//                event.key.scancode == SDL_SCANCODE_3 ||
+//                event.key.scancode == SDL_SCANCODE_4) {
+//                rotatePlayer(event);
+//            }
+//
+//        }
+//
+//        if (event.type == SDL_EVENT_KEY_UP) {
+//
+//            //pressedKeysEvents.erase(event.key.scancode);
+//            pressedKeys.erase(event.key.scancode);
+//
+//            if (event.key.scancode == SDL_SCANCODE_SPACE) {
+//                /// <summary>
+//                ///move to Rocket Controller since it is neccesery to rotate warfare
+//                /// </summary>
+//                //TO DO: apply for rocket build strategy size
+//                float rocketWidth = 25.0f;
+//                float rocketHeight = 25.0f;
+//                createRocket(player.x + 25, player.y + 25, rocketWidth, rocketHeight);
+//
+//            }
+//        }
+//    }
+//}
 
-void Player::updatePos(SDL_Event e) {
 
-    switch (e.key.scancode) {
-    case SDL_SCANCODE_UP:    player.y -= speed; player.y; break;
-    case SDL_SCANCODE_DOWN:  player.y += speed; player.y; break;
-    case SDL_SCANCODE_LEFT:  player.x -= speed; player.x; break;
-    case SDL_SCANCODE_RIGHT: player.x += speed; player.x; break;
+void Player::updatePos() {
+    float yCopy = player.y;
+    float xCopy = player.x;
+
+    if (pressedKeys.count(SDL_SCANCODE_UP) && (yCopy - speed) >= 0) {
+        player.y -= speed;
+    }
+    if (pressedKeys.count(SDL_SCANCODE_DOWN) && (yCopy + speed) <= (SCREEN_HEIGHT - player.h)) {
+        player.y += speed;
+    }
+    if (pressedKeys.count(SDL_SCANCODE_LEFT) && (xCopy - speed) >= 0) {
+        player.x -= speed;
+    }
+    if (pressedKeys.count(SDL_SCANCODE_RIGHT) && (xCopy + speed) <= (SCREEN_WIDTH - player.w)) {
+        player.x += speed;
     }
 }
 
@@ -117,4 +194,8 @@ void Player::rotatePlayer(SDL_Event e) {
         case SDL_SCANCODE_3:  playerDir = Dir::DOWN; break;
         case SDL_SCANCODE_4:  playerDir = Dir::LEFT; break;
     }
+}
+
+std::set<SDL_Scancode> Player::getPressedKeys() {
+    return pressedKeys;
 }
