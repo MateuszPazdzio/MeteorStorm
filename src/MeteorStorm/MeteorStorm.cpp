@@ -8,6 +8,7 @@
 #include "TextureController.h"
 #include "ScoreTexture.h"
 #include "CollisionController.h"
+#include "MeteorStorm.h"
 
 // Screen dimensions
 const float SCREEN_WIDTH = 800;

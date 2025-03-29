@@ -13,7 +13,7 @@
 bool CollisionController::verifyMeteorCollisions(SDL_Renderer* renderer, TextureController* textureController, Player* player, MeteorController* meteorController) {
 
     bool collisionWithPlayer = false;
-
+    //TO DO: when there are not rockets just escapr faster from the loop
     Meteor** meteors = meteorController->getMeteors();
     for (int i = 0; i < 5; i++) {  // ✅ Iterate over the fixed-size array
         Meteor* meteor = meteors[i];

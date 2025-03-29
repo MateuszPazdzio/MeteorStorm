@@ -15,15 +15,17 @@ private:
 	void runRMeteorRendering(SDL_Renderer* renderer);
 	SDL_FRect meteorBody;
 	Player* player;
+	bool wantsACollisionWithPlayer;
 
 public:
-	Meteor(Player* player);
+	Meteor(Player* player, bool wantsACollisionWithPlayer);
 
 	void updatePos(SDL_Renderer* renderer);
 	float getHeight();
 	float getX();
 	float getY();
 	float getWidth();
-
+	void updateForSpecDir(int result);
+	bool getWantsACollisionWithPlayer();
 };
 
