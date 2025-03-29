@@ -1,5 +1,6 @@
 #include <SDL3/SDL.h>
 #include "Player.h"
+#include "Helpers.h"
 #include "TextureController.h"
 #include <algorithm>
 #include <iostream>
@@ -16,7 +17,7 @@ const float SCREEN_WIDTH = 800;
 const float SCREEN_HEIGHT = 600;
 
 Player::Player(int s, TextureController* textureController) : speed(s), textureController(textureController) {
-    player = { 200.0f, 200.0f, 50.0f, 50.0f };
+    player = { (float)Helpers::getRandomValue(0, 750), (float)Helpers::getRandomValue(0, 550), 50.0f, 50.0f };
 }
 void Player::handleInput(bool& running) {
     while (SDL_PollEvent(&event)) {
