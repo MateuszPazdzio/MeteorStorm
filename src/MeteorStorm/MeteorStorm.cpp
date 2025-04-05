@@ -23,6 +23,7 @@ int X_LIMIT = 740;
 int Y_LIMIT = 540;
 int MOVE_STEP = 2;
 int meteorRandomMovmentBoundry = 2; //defines when what is a boundry in range from which random number is get, that defines move of meteor towards player
+bool levelChosen = false;
 
 Player* player;
 TextureController* textureController;
@@ -88,6 +89,15 @@ int main(int argc, char* argv[]) {
 
     while (running) {
 
+        if (!levelChosen) {
+
+            textureController->showStartGameScreen(renderer);
+            levelChosen = true;
+            initGamePlay();
+        }
+
+        //if user click X button, then game will end already on startgame screen
+        if (!running) break;
         player->handleInput(running);
         player->updatePos();
 

@@ -19,5 +19,8 @@ public:
 	void clear();
 	bool handleEndGameInput();
 	bool isEscapeOrEnterBtnPressedDown(const SDL_Event& event);
+	int handleStartGameInput();
+	bool isLevelOptionButtonPressed(const SDL_Event& event);
+	void showStartGameScreen(SDL_Renderer* renderer);
 };
 

@@ -164,6 +164,7 @@
     <ClInclude Include="Rocket.h" />
     <ClInclude Include="ScoreTexture.h" />
     <ClInclude Include="MeteorStorm.h" />
+    <ClInclude Include="StartGameTexture.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureController.h" />
   </ItemGroup>
@@ -179,6 +180,7 @@
     <ClCompile Include="Rocket.cpp" />
     <ClCompile Include="ScoreTexture.cpp" />
     <ClCompile Include="MeteorStorm.cpp" />
+    <ClCompile Include="StartGameTexture.cpp" />
     <ClCompile Include="TextureController.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>

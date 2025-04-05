@@ -3,6 +3,11 @@
 #include <SDL3/SDL.h>
 #include <string>
 
+enum LEVEL {
+	EASY = 1,
+	MEDIUM = 2,
+	HARD = 3
+};
 
 void initGamePlay();
 bool loadMedia();
@@ -24,3 +29,4 @@ extern int X_LIMIT;
 extern int Y_LIMIT;
 extern int MOVE_STEP;
 extern int meteorRandomMovmentBoundry;
+extern bool levelChosen;
