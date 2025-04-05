@@ -2,23 +2,24 @@
 #include "Meteor.h"
 #include "Player.h"
 #include <SDL3/SDL.h>
+#include <vector>
+#include <iostream>
+
 class MeteorController
 {
 private:
 	size_t maxMeteorCount;
-	Meteor* meteorAlive[5]{ nullptr };
 	Player* player;
+	std::vector<Meteor*> meteorsAlive;
+	float meteorWidth, meteorHeight;
+
 public:
-	struct Cord {
-		float x;
-		float y;
-	};
-	MeteorController(size_t maxMeteorCount, Player* player);
+	MeteorController(size_t maxMeteorCount, Player* player, float meteorWidth, float meteorHeight);
 	void updatePos(SDL_Renderer* renderer);
-	void generateMeteors();
 	void clearMeteors();
-	void checkIfAreaOfMeteorOverlapsWithRocket(std::vector<Rocket> rockets);
+	void checkIfAreaOfMeteorOverlapsWithRocket(std::vector<Rocket*>& rockets);
 	bool checkIfAreaOfMeteorOverlapsWithPlayer();
-	Meteor** getMeteors();
+	std::vector<Meteor*>& getMeteors();
+	void createMeteor();
 };
 

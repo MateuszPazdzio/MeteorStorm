@@ -4,6 +4,4 @@
 #include <iostream>
 
 Texture::Texture(SDL_Renderer* renderer,std::string text, SDL_FRect textRect, SDL_Color color, TTF_Font* font)
-    : renderer(renderer),text(text), textRect(textRect), color(color), font(font) {
-    // Base constructor logic (can be empty for abstract classes)
-}
+    : renderer(renderer),text(text), textRect(textRect), color(color), font(font) {}

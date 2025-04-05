@@ -17,5 +17,7 @@ public:
 	void updateCounterTexture();
 	void showEndGameScreen(SDL_Renderer* renderer);
 	void clear();
+	bool handleEndGameInput();
+	bool isEscapeOrEnterBtnPressedDown(const SDL_Event& event);
 };
 

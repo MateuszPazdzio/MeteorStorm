@@ -1,4 +1,4 @@
-#include "MeteorController.h"
+ï»¿#include "MeteorController.h"
 #include "Meteor.h"
 #include "Rocket.h"
 #include "Helpers.h"
@@ -6,63 +6,44 @@
 #include <iostream>
 #include <cmath>
 #include "MeteorStorm.h"
+#include <vector>
 
-size_t maxMeteorCount;
-Meteor* meteorAlive[5]{ nullptr };
-Player* player;
-
-MeteorController::MeteorController(size_t maxMeteorCount, Player* player)
-    : maxMeteorCount(maxMeteorCount), player(player) {
-
-};
-
-Meteor** MeteorController::getMeteors() {
-    return meteorAlive;
-};
+MeteorController::MeteorController(size_t maxMeteorCount, Player* player, float meteorWidth, float meteorHeight)
+    : maxMeteorCount(maxMeteorCount), player(player), meteorWidth(meteorWidth), meteorHeight(meteorHeight){
+    meteorsAlive.assign(maxMeteorCount, nullptr); 
+}
 
 void MeteorController::updatePos(SDL_Renderer* renderer) {
-    //based on level check enemy count, that are alive
+
     int meteorCount = 0;
-
-    for (auto* meteor : meteorAlive) {
-        if (meteor) meteorCount++;
-    }
-
-    //update meteor pos
-    for (auto* meteor : meteorAlive) {
-        if (meteor) meteor->updatePos(renderer);
-    }
-
-
-    if (meteorCount < maxMeteorCount) {
-        int meteorToAdd = maxMeteorCount - meteorCount;
-        for (size_t i = 0; i < maxMeteorCount && meteorToAdd > 0; i++)
-        {
-            if (meteorAlive[i] == nullptr) {
-                int predatorTreshold = std::ceil(PREDATOR_METEOR_RATIO * maxMeteorCount);
-                bool meteorWantsToACollisionWithPlayer = Helpers::getRandomValue(1, maxMeteorCount) < predatorTreshold ? true: false;
-                meteorAlive[i] = new Meteor(player, meteorWantsToACollisionWithPlayer);
-                meteorToAdd--;
-            }
+    for (auto* meteor : meteorsAlive) {
+        if (meteor) {
+            meteorCount++;
+            meteor->updatePos(renderer);
         }
     }
-}
-void MeteorController::generateMeteors() {
 
-}
-
-void clearMeteors() {
-    for (size_t i = 0; i < maxMeteorCount; i++) {
-        if (meteorAlive[i] != nullptr) {
-            delete meteorAlive[i];  // Free memory
-            meteorAlive[i] = nullptr;
-        }
+    for (size_t i = 0; i < maxMeteorCount - meteorCount; i++)
+    {
+        createMeteor();
     }
 }
-//dodac texture game over i sprzatniecie ca³ej zawartosci ekranu w momencie jej wyswieltenia, jezeli naciskasz Enter to gra leci na nowo
-/*To DO: wygenerowac teksture petli ktora zmiata wszystkie rzeczy i reaguje tylko ne enter lub ESC - dodac do TextureController EndGameTexture, rozwazyc
-czy texture powienien miec pole z nazwa ekranu na ktorej ma sie wyswieltac. wtedy moglyby byc renderowane tylko te teksture z vectora ktore sa widoczne na danym
-ekranie.*/
+
+void MeteorController::createMeteor() {
+
+    int predatorTreshold = std::ceil(predator_meteor_ratio * maxMeteorCount);
+    bool meteorWantsToACollisionWithPlayer = Helpers::getRandomValue(1, maxMeteorCount) < predatorTreshold;
+    meteorsAlive.push_back(new Meteor(player, meteorWantsToACollisionWithPlayer));
+
+}
+
+void MeteorController::clearMeteors() {
+
+    for (auto* meteor : meteorsAlive) {
+        delete meteor;
+    }
+    meteorsAlive.clear();
+}
 
 bool MeteorController::checkIfAreaOfMeteorOverlapsWithPlayer() {
 
@@ -71,9 +52,7 @@ bool MeteorController::checkIfAreaOfMeteorOverlapsWithPlayer() {
     float playerBottom = player->getY();
     float playerTop = playerBottom + player->getHeight();
 
-    bool playerHit = false;
-
-    for (auto*& meteor : meteorAlive) {
+    for (auto* meteor : meteorsAlive) {
         if (!meteor) continue;
 
         float meteorLeft = meteor->getX();
@@ -84,24 +63,33 @@ bool MeteorController::checkIfAreaOfMeteorOverlapsWithPlayer() {
         if (playerRight > meteorLeft && playerLeft < meteorRight &&
             playerTop > meteorBottom && playerBottom < meteorTop) {
             std::cout << "Touched a player" << std::endl;
-            playerHit = true;
-            break;
+            return true;
         }
     }
-
-    return playerHit;
+    return false;
 }
-void MeteorController::checkIfAreaOfMeteorOverlapsWithRocket(std::vector<Rocket> rockets) {
 
-    for (auto& rocket : rockets) {
+void MeteorController::checkIfAreaOfMeteorOverlapsWithRocket(std::vector<Rocket*>& rockets) {
 
-        float rocketLeft = rocket.getrocketBody().x;
+    auto rocketIt = rockets.begin();
+
+    while (rocketIt != rockets.end()) {
+        Rocket* rocket = *rocketIt;
+        float rocketLeft = rocket->getrocketBody().x;
         float rocketRight = rocketLeft + 25.0f;
-        float rocketBottom = rocket.getrocketBody().y;
+        float rocketBottom = rocket->getrocketBody().y;
         float rocketTop = rocketBottom + 25.0f;
 
-        for (auto*& meteor : meteorAlive) {
-            if (!meteor) continue;
+        auto meteorIt = meteorsAlive.begin();
+
+        while (meteorIt != meteorsAlive.end()) {
+
+            Meteor* meteor = *meteorIt;
+
+            if (!meteor) {
+                ++meteorIt;
+                continue;
+            }
 
             float meteorLeft = meteor->getX();
             float meteorRight = meteorLeft + meteor->getWidth();
@@ -110,15 +98,28 @@ void MeteorController::checkIfAreaOfMeteorOverlapsWithRocket(std::vector<Rocket>
 
             if (rocketRight > meteorLeft && rocketLeft < meteorRight &&
                 rocketTop > meteorBottom && rocketBottom < meteorTop) {
+
                 std::cout << "Touched" << std::endl;
                 player->getTextController()->updateCounterTexture();
+
                 delete meteor;
-                meteor = nullptr;
+
+                meteorIt = meteorsAlive.erase(meteorIt);
+                rocketIt = rockets.erase(rocketIt); 
+
+                break;
+            }
+            else {
+                ++meteorIt;
             }
         }
+
+        if (rocketIt != rockets.end()) {
+            ++rocketIt;
+        }
     }
-
-
 }
 
-
+std::vector<Meteor*>& MeteorController::getMeteors() {
+    return meteorsAlive;
+}

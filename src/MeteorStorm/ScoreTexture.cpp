@@ -4,10 +4,9 @@
 #include <iostream>
 #include "Helpers.h"
 
-int destroyednMeteorCount = 0;
-
 ScoreTexture::ScoreTexture(SDL_Renderer* renderer, std::string text, SDL_FRect textRect, SDL_Color color, TTF_Font* font)
     : Texture(renderer, text, textRect, color, font) {
+
     this->text = text;
     this->color = color;
     this->font = font;
@@ -22,12 +21,6 @@ void ScoreTexture::createTexture() {
     textureFromSurface = SDL_CreateTextureFromSurface(renderer, surface);
 }
 
-void countCharsInString(const char* str, int &count) {
-    while (*str) {
-        count++;
-        str += 1;
-    }
-}
 void ScoreTexture::render() {
     SDL_RenderTexture(renderer, textureFromSurface, nullptr, &textRect);
 }

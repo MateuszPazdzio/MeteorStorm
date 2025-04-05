@@ -2,20 +2,30 @@
 #include <SDL3/SDL.h>
 #include "Player.h"
 #include "GameObject.h"
-
+#include <map>
+enum Direction {
+	NORTH,
+	EAST,
+	SOUTH,
+	WEST
+};
 class Meteor : public GameObject
 {
+
+struct Movement {
+	float* coordinate;
+	int delta;
+	int limit;
+};
+
 private:
-	
-	float x;
-	float y;
-	float w;
-	float h;
-	int getRandomMeteorPos(int min, int max,int xOry);
-	void runRMeteorRendering(SDL_Renderer* renderer);
+	int generateRandomMeteorPosition(int min, int max,int xOry);
+	float generateRandomMeteorPosition(int min, int max, float meteorPosCoord);
+	void runMeteorRendering(SDL_Renderer* renderer);
 	SDL_FRect meteorBody;
 	Player* player;
 	bool wantsACollisionWithPlayer;
+	std::map<Direction, Movement> movements;
 
 public:
 	Meteor(Player* player, bool wantsACollisionWithPlayer);
@@ -25,7 +35,7 @@ public:
 	float getX();
 	float getY();
 	float getWidth();
-	void updateForSpecDir(int result);
+	void updateForSpecDir(Direction direction);
 	bool getWantsACollisionWithPlayer();
 };
 

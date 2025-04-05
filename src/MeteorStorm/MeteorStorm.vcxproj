@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CollisionController.h" />
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="GameOverTexture.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Meteor.h" />
@@ -168,6 +169,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CollisionController.cpp" />
+    <ClCompile Include="Constants.cpp" />
     <ClCompile Include="GameOverTexture.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Meteor.cpp" />

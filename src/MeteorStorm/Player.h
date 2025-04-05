@@ -27,7 +27,7 @@ public:
 	float getHeight() override;
 	float getWidth() override;
 	SDL_FRect* getPlayer();
-	std::vector<Rocket*> getRockets();
+	std::vector<Rocket*>& getRockets();
 	void createRocket(float startX, float startY, float width, float height);
 	void updateRocketPos(SDL_Renderer* renderer);
 	void rotatePlayer(SDL_Event e);
