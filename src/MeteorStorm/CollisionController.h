@@ -12,6 +12,5 @@ private:
 	bool IsMeteorCollisionWithPlayerOccurred(Meteor* meteor, Player* player);
 public:
 	bool verifyMeteorCollisions(SDL_Renderer* renderer, TextureController* textureController, Player* player, MeteorController* meteorController);
-	//bool isCollision(GameObject* obj1, GameObject* obj2);
 };
 

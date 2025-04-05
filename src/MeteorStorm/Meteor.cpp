@@ -6,142 +6,93 @@
 #include "Player.h"
 #include "MeteorStorm.h"
 
-	float x;
-	float y;
-	float w;
-	float h;
+	/*@meteorPosCoord might by x or y coordinate
+	@playerPos might relate to y or x coordinate*/
 
-	SDL_FRect meteorBody;
+	float Meteor::generateRandomMeteorPosition(int min, int max, float playerPos) {
+		//we assume that meteor is a square
 
-	int Meteor::getRandomMeteorPos(int min, int max, int xOry) {
-		float posVal = 0.0f;
-		if (xOry == 0) {
-			posVal = player->getX();
-		}
-		else {
-			posVal = player->getY();
-		}
-		int val = -1;
-		float diff = 0.0f;
-		while (val == -1 || diff < 100) {
-			val = Helpers::getRandomValue(min, max);
-			diff = std::abs(posVal - val);
-		}
+		int randomMeteorInitPos;
+		float distanceBetweenPlayerAndMeteor;
 
-		return val;
+		do {
+
+			randomMeteorInitPos = Helpers::getRandomValue(min, max);
+			distanceBetweenPlayerAndMeteor = std::abs(playerPos - randomMeteorInitPos);
+
+		} while (distanceBetweenPlayerAndMeteor < meteorBaseInitialDistanceFromPlayer);
+
+		return randomMeteorInitPos;
 	}
 
 	Meteor::Meteor(Player* player, bool wantsACollWithPlayer) : player(player), wantsACollisionWithPlayer(wantsACollWithPlayer)
 	{
-		x = getRandomMeteorPos(0,750,0);
-		y = getRandomMeteorPos(0,550,1);
-		w = 50.0;
-		h = 50.0;
-		// Draw player
-		meteorBody = { x,y,50.0f,50.0f };
-	};
-	void Meteor::updateForSpecDir(int result) {
-		switch (result)
-			//switch (Helpers::getRandomValue(1,4))
-		{
-		case 1:
-			if (meteorBody.x > 740) {
-				runRMeteorRendering(renderer);
-				return;
-			}
-			meteorBody.x += 2;
-			x += 2;
-			break;
-		case 2:
-			if (meteorBody.x < 0) {
-				runRMeteorRendering(renderer);
-				return;
-			}
-			meteorBody.x -= 2;
-			x -= 2;
-			break;
-
-		case 3:
-			if (meteorBody.y > 540) {
-				runRMeteorRendering(renderer);
-				return;
-			}
-			meteorBody.y += 2;
-			y += 2;
-			break;
-
-		case 4:
-			if (meteorBody.y < 0) {
-				runRMeteorRendering(renderer);
-				return;
-			}
-			meteorBody.y -= 2;
-			y -= 2;
-			break;
-			//case 2: enemyBody.x -= 10;break;
-			//case 3: enemyBody.y += 10;break;
-			//case 4: enemyBody.y -= 10;break;
-		default: break;
+		meteorBody = { generateRandomMeteorPosition(0,750,player->getX()),generateRandomMeteorPosition(0,550,player->getY()),meteorWidth, meteorHeight};
+		movements = {
+			{Direction::EAST , {&meteorBody.x,  MOVE_STEP,  X_LIMIT}},
+			{Direction::WEST , {&meteorBody.x, -MOVE_STEP,  0      }},
+			{Direction::SOUTH , {&meteorBody.y,  MOVE_STEP,  Y_LIMIT }},
+			{Direction::NORTH , {&meteorBody.y, -MOVE_STEP,  0       }},
 		};
+	};
+
+	void Meteor::updateForSpecDir(Direction direction) {
+		
+			Movement& move = movements[direction];
+
+			if ((move.delta > 0 && *move.coordinate > move.limit) ||
+				(move.delta < 0 && *move.coordinate < move.limit)) {
+				runMeteorRendering(renderer);
+			}
+			else {
+				*move.coordinate += move.delta;
+			}
 	}
+
 	void Meteor::updatePos(SDL_Renderer* renderer) {
 
 
 		/*if meteor does not want to hunt for a player, it will be just randomly moving. It's still dangerous for player, but does not try to destroy him.*/
 		if (!wantsACollisionWithPlayer) {
 			//move player randomly in particular direction
-			updateForSpecDir(Helpers::getRandomValue(1, 4));
-			runRMeteorRendering(renderer);
+			updateForSpecDir(Helpers::generateRandomDirection());
+			runMeteorRendering(renderer);
 			return;
 		}
 
 
 		/*Calculate meteor position based on player position. Meteor strives to make equlal its x and y cord with player's one. So the diffrence between meteor and player
-		should be mreduced to 0. x2- x1; y2- y1;*/
+		should be reduced to 0. x2- x1; y2- y1;*/
 
-		//put some random number, that in case of its presence will move randomly a meteor. It is made for purpose to make game easier and to 
-		// make meteros not ovelrlap so much
-		int randomValue = Helpers::getRandomValue(0, 2);//higher the range, then the harder game is, since meteor will move more often in direction of player
-
-
-		if (randomValue == 2) {
-			updateForSpecDir(Helpers::getRandomValue(1, 4));
+		int randomValue = Helpers::getRandomValue(0, meteorRandomMovmentBoundry);//higher the range, then the harder game is, since meteor will move more often in direction of player
+		
+		//so when luckly it hits range boundry meteor should move in random direction
+		if (randomValue == meteorRandomMovmentBoundry) {
+			updateForSpecDir(Helpers::generateRandomDirection());
 		}
-		else {
-			float diffXBetweenMeteorAndPlayer = x - player->getX();
-			float diffYBetweenMeteorAndPlayer = y - player->getY();
-			int result = 0;
+		else 
+		{
+			/*move meteor right when its less then 0 (1:LEFT)
+			move meteor left when its greater or equal then 0 (3:RIGHT)*/
+			updateForSpecDir(static_cast<Direction>((meteorBody.x - player->getX()) <= 0 ? 1 : 3));
 
-			if (diffXBetweenMeteorAndPlayer < 0) {
-				result = 1;
-			}
-			else if (diffXBetweenMeteorAndPlayer > 0) {
-				result = 2;
-			}
+			/*move meteor top when its greater or equal then 0 (0:NORTH)
+			move meteor bottom when its less then 0 (3:RIGHT)*/
+			updateForSpecDir(static_cast<Direction>((meteorBody.y - player->getY()) >= 0 ? 0 : 2));
 
-			updateForSpecDir(result);
-
-			if (diffYBetweenMeteorAndPlayer < 0) {
-				result = 3;
-			}
-			else if (diffYBetweenMeteorAndPlayer > 0) {
-				result = 4;
-			}
-
-			updateForSpecDir(result);
 		}
 		
 
-		runRMeteorRendering(renderer);
+		runMeteorRendering(renderer);
 	}
 
-	void Meteor::runRMeteorRendering(SDL_Renderer* renderer) {
+	void Meteor::runMeteorRendering(SDL_Renderer* renderer) {
 		SDL_SetRenderDrawColor(renderer, 255, 200, 0, 255);
 		SDL_RenderFillRect(renderer, &meteorBody);
 	}
 
-	float Meteor::getX() { return x; }
-	float Meteor::getY()  { return y; }
-	float Meteor::getWidth()  { return w; }
-	float Meteor::getHeight()  { return h; }
+	float Meteor::getX() { return meteorBody.x; }
+	float Meteor::getY()  { return meteorBody.y; }
+	float Meteor::getWidth()  { return meteorBody.w; }
+	float Meteor::getHeight()  { return meteorBody.h; }
 	bool Meteor::getWantsACollisionWithPlayer()  { return wantsACollisionWithPlayer; }

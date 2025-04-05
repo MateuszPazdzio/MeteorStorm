@@ -1,24 +1,26 @@
-#ifndef SNAKE_H
-#define SNAKE_H
-
+#pragma once
 #define SDL_MAIN_HANDLED  // Prevent SDL from redefining main()
 #include <SDL3/SDL.h>
 #include <string>
 
-// Screen dimensions
-constexpr int kScreenWidth{ 800 };
-constexpr int kScreenHeight{ 600 };
-const float PREDATOR_METEOR_RATIO = 0.5;//reflected in bool wantsACollisionWithPlayer in MEtoero construcotr/ represent ration of meteors that are 'hunting' for player
 
-
-// Function declarations
-bool init();
+void initGamePlay();
 bool loadMedia();
-void close();
+void cleanup();
 
 // Global Variables
 extern SDL_Window* gWindow;
 extern SDL_Surface* gScreenSurface;
 extern SDL_Surface* gHelloWorld;
 extern SDL_Renderer* renderer;
-#endif // SNAKE_H
+extern float predator_meteor_ratio;//reflected in bool wantsACollisionWithPlayer in MEtoero construcotr/ represent ration of meteors that are 'hunting' for player
+extern int player_speed;//reflected in bool wantsACollisionWithPlayer in MEtoero construcotr/ represent ration of meteors that are 'hunting' for player
+extern bool running;
+extern int meteors_count;
+extern float meteorWidth;
+extern float meteorHeight;
+extern int meteorBaseInitialDistanceFromPlayer;
+extern int X_LIMIT;
+extern int Y_LIMIT;
+extern int MOVE_STEP;
+extern int meteorRandomMovmentBoundry;

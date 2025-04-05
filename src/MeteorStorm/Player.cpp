@@ -6,15 +6,13 @@
 #include <iostream>
 #include <vector>
 #include <set>
+#include "Constants.h";
 
 int speed;
 SDL_FRect player;
 SDL_Event event;
 std::vector<Rocket*> rockets;
 Dir playerDir = Dir::LEFT;
-
-const float SCREEN_WIDTH = 800;
-const float SCREEN_HEIGHT = 600;
 
 Player::Player(int s, TextureController* textureController) : speed(s), textureController(textureController) {
     player = { (float)Helpers::getRandomValue(0, 750), (float)Helpers::getRandomValue(0, 550), 50.0f, 50.0f };
@@ -63,61 +61,6 @@ void Player::handleInput(bool& running) {
         }
     }
 }
-//void Player::handleInput(bool& running) {
-//
-//    while (SDL_PollEvent(&event)) {
-//
-//        if (event.type == SDL_EVENT_QUIT) {
-//            running = false;
-//        }
-//
-//        if (event.type == SDL_EVENT_KEY_DOWN) {
-//
-//            //pressedKeysEvents.insert(event.key.scancode);
-//            float yCopy = player.y;
-//            float xCopy = player.x;
-//            pressedKeys.insert(event.key.scancode);
-//
-//
-//            for (auto event : pressedKeys) {
-//                updatePos2(event);
-//            }
-//            //if (event.key.scancode == SDL_SCANCODE_UP ||
-//            //    event.key.scancode == SDL_SCANCODE_DOWN ||
-//            //    event.key.scancode == SDL_SCANCODE_LEFT ||
-//            //    event.key.scancode == SDL_SCANCODE_RIGHT) {
-//
-//            //    updatePos(event);
-//            //}
-//
-//            if (event.key.scancode == SDL_SCANCODE_1 ||
-//                event.key.scancode == SDL_SCANCODE_2 ||
-//                event.key.scancode == SDL_SCANCODE_3 ||
-//                event.key.scancode == SDL_SCANCODE_4) {
-//                rotatePlayer(event);
-//            }
-//
-//        }
-//
-//        if (event.type == SDL_EVENT_KEY_UP) {
-//
-//            //pressedKeysEvents.erase(event.key.scancode);
-//            pressedKeys.erase(event.key.scancode);
-//
-//            if (event.key.scancode == SDL_SCANCODE_SPACE) {
-//                /// <summary>
-//                ///move to Rocket Controller since it is neccesery to rotate warfare
-//                /// </summary>
-//                //TO DO: apply for rocket build strategy size
-//                float rocketWidth = 25.0f;
-//                float rocketHeight = 25.0f;
-//                createRocket(player.x + 25, player.y + 25, rocketWidth, rocketHeight);
-//
-//            }
-//        }
-//    }
-//}
-
 
 void Player::updatePos() {
     float yCopy = player.y;
@@ -126,13 +69,13 @@ void Player::updatePos() {
     if (pressedKeys.count(SDL_SCANCODE_UP) && (yCopy - speed) >= 0) {
         player.y -= speed;
     }
-    if (pressedKeys.count(SDL_SCANCODE_DOWN) && (yCopy + speed) <= (SCREEN_HEIGHT - player.h)) {
+    if (pressedKeys.count(SDL_SCANCODE_DOWN) && (yCopy + speed) <= (Constants::SCREEN_HEIGHT - player.h)) {
         player.y += speed;
     }
     if (pressedKeys.count(SDL_SCANCODE_LEFT) && (xCopy - speed) >= 0) {
         player.x -= speed;
     }
-    if (pressedKeys.count(SDL_SCANCODE_RIGHT) && (xCopy + speed) <= (SCREEN_WIDTH - player.w)) {
+    if (pressedKeys.count(SDL_SCANCODE_RIGHT) && (xCopy + speed) <= (Constants::SCREEN_WIDTH - player.w)) {
         player.x += speed;
     }
 }
@@ -141,7 +84,7 @@ TextureController* Player::getTextController() {
     return textureController;
 }
 
-std::vector<Rocket*> Player::getRockets() {
+std::vector<Rocket*>& Player::getRockets() {
     return rockets;
 }
 
@@ -171,7 +114,7 @@ void Player::updateRocketPos(SDL_Renderer* renderer) {
     for (Rocket* rocket : rockets) {
         rocket->updatePos(renderer);
         SDL_FRect rocketBody = rocket->getrocketBody();
-        if ((rocketBody.x + rocketBody.w) > SCREEN_WIDTH || (rocketBody.x < 0) || (rocketBody.y - rocketBody.h) > SCREEN_HEIGHT || (rocketBody.y < 0)) {
+        if ((rocketBody.x + rocketBody.w) > Constants::SCREEN_WIDTH || (rocketBody.x < 0) || (rocketBody.y - rocketBody.h) > Constants::SCREEN_HEIGHT || (rocketBody.y < 0)) {
             removeRocket(rocket);
         }
     }
