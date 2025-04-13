@@ -155,8 +155,13 @@
   <ItemGroup>
     <ClInclude Include="CollisionController.h" />
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="EasyDifficulty.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="GameDifficultyStrategy.h" />
     <ClInclude Include="GameOverTexture.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="HardDifficulty.h" />
+    <ClInclude Include="MediumDifficulty.h" />
     <ClInclude Include="Meteor.h" />
     <ClInclude Include="MeteorController.h" />
     <ClInclude Include="Helpers.h" />
@@ -171,8 +176,13 @@
   <ItemGroup>
     <ClCompile Include="CollisionController.cpp" />
     <ClCompile Include="Constants.cpp" />
+    <ClCompile Include="EasyDifficulty.cpp" />
+    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="GameDifficultyStrategy.cpp" />
     <ClCompile Include="GameOverTexture.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="HardDifficulty.cpp" />
+    <ClCompile Include="MediumDifficulty.cpp" />
     <ClCompile Include="Meteor.cpp" />
     <ClCompile Include="MeteorController.cpp" />
     <ClCompile Include="Helpers.cpp" />

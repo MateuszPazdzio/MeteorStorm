@@ -2,8 +2,11 @@
 #define SDL_MAIN_HANDLED  // Prevent SDL from redefining main()
 #include <SDL3/SDL.h>
 #include <string>
+#include "GameDifficultyStrategy.h">
+#include <map>
 
-enum LEVEL {
+extern enum Level {
+	NONE = 0,
 	EASY = 1,
 	MEDIUM = 2,
 	HARD = 3
@@ -12,6 +15,8 @@ enum LEVEL {
 void initGamePlay();
 bool loadMedia();
 void cleanup();
+
+extern std::map<Level, GameDifficultyStrategy*> diffLevels;
 
 // Global Variables
 extern SDL_Window* gWindow;
@@ -29,4 +34,6 @@ extern int X_LIMIT;
 extern int Y_LIMIT;
 extern int MOVE_STEP;
 extern int meteorRandomMovmentBoundry;
-extern bool levelChosen;
+extern Level level;
+
+////-----------TO DO: move externs to GameConfig class

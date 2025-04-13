@@ -3,6 +3,7 @@
 #include <SDL3_ttf/SDL_ttf.h>
 #include "Texture.h"
 #include <vector>
+#include "MeteorStorm.h"
 
 class TextureController
 {
@@ -19,7 +20,7 @@ public:
 	void clear();
 	bool handleEndGameInput();
 	bool isEscapeOrEnterBtnPressedDown(const SDL_Event& event);
-	int handleStartGameInput();
+	void handleStartGameInput(bool& showStartGameScr);
 	bool isLevelOptionButtonPressed(const SDL_Event& event);
 	void showStartGameScreen(SDL_Renderer* renderer);
 };

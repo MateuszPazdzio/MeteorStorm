@@ -10,6 +10,27 @@
 #include "CollisionController.h"
 #include "MeteorStorm.h"
 #include "Constants.h"
+#include "GameManager.h"
+#include "GameDifficultyStrategy.h"
+#include "EasyDifficulty.h"
+#include "MediumDifficulty.h"
+#include "HardDifficulty.h"
+#include <map>
+
+//struct GameConfig {
+//    float predator_meteor_ratio;
+//    int player_speed;
+//    bool running;
+//    int meteors_count;
+//    float meteorWidth;
+//    float meteorHeight;
+//    int meteorBaseInitialDistanceFromPlayer;
+//    int X_LIMIT;
+//    int Y_LIMIT;
+//    int MOVE_STEP;
+//    int meteorRandomMovmentBoundry;
+//};
+
 
 //default values:
 float predator_meteor_ratio = 0.5f;
@@ -23,7 +44,13 @@ int X_LIMIT = 740;
 int Y_LIMIT = 540;
 int MOVE_STEP = 2;
 int meteorRandomMovmentBoundry = 2; //defines when what is a boundry in range from which random number is get, that defines move of meteor towards player
-bool levelChosen = false;
+
+Level level = Level::NONE;
+std::map<Level, GameDifficultyStrategy*> diffLevels = {
+    { Level::EASY, new EasyDifficulty() },
+    { Level::MEDIUM, new MediumDifficulty() },
+    { Level::HARD, new HardDifficulty() }
+};
 
 Player* player;
 TextureController* textureController;
@@ -33,6 +60,12 @@ CollisionController* collisionController;
 
 SDL_Renderer* renderer = { nullptr };
 
+void setGameProperties() {
+
+    GameManager gM = GameManager(diffLevels[level]);
+    gM.executeGameStrategy();
+}
+
 void initGamePlay() {
 
     delete textureController;
@@ -40,12 +73,15 @@ void initGamePlay() {
     delete meteorController;
     delete collisionController;
 
+    if(level != Level::NONE) setGameProperties();
+
     textureController = new TextureController(renderer);
     sT = new ScoreTexture(renderer, "Score: 0", { 50, 50, 70.0f, 50.0f }, { 255, 255, 255, 255 }, TTF_OpenFont("../assets/OpenSans.ttf", 24));
     textureController->addTexture(sT);
     player = new Player(10, textureController);
     meteorController = new MeteorController(meteors_count, player, meteorHeight, meteorWidth);
     collisionController = new CollisionController();
+
 }
 
 void cleanup() {
@@ -89,10 +125,9 @@ int main(int argc, char* argv[]) {
 
     while (running) {
 
-        if (!levelChosen) {
+        if (level == Level::NONE) {
 
             textureController->showStartGameScreen(renderer);
-            levelChosen = true;
             initGamePlay();
         }
 

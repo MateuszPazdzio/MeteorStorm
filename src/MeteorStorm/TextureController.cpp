@@ -58,45 +58,46 @@ void TextureController::showStartGameScreen(SDL_Renderer* renderer) {
     bool showStartGameScr = true;
 
     //wait until user hits ESCAPE or 1,2,3
-    while (showStartGameScr) {
+    while (level == Level::NONE && running) {
 
         // Render Game Over Screen
         SDL_RenderClear(renderer);
         renderTexture();
         SDL_RenderPresent(renderer);
 
-        int result = handleStartGameInput();
-        running = result != 4;
-        showStartGameScr = result == 0;
+        handleStartGameInput(showStartGameScr);
     }
 
 
 }
 
-int TextureController::handleStartGameInput() {
+void TextureController::handleStartGameInput(bool& showStartGameScr) {
 
     SDL_Event event;
-    bool showStartGameScr = true;
 
     while (SDL_PollEvent(&event)) {
 
         if (event.type == SDL_EVENT_QUIT || isLevelOptionButtonPressed(event)) {
-            showStartGameScr = false;
+
+
             if (event.key.scancode == SDL_SCANCODE_1) {
-                return 1;
+                level = Level::EASY;
             }
             if (event.key.scancode == SDL_SCANCODE_2) {
-                return 2;
+                level = Level::MEDIUM;
             }
             if (event.key.scancode == SDL_SCANCODE_3) {
-                return 3;
+                level = Level::HARD;
             }
 
-            return 4;
-            //running = (event.key.scancode == SDL_SCANCODE_SPACE);
+            running = (event.key.scancode == SDL_SCANCODE_1 || event.key.scancode == SDL_SCANCODE_2 || event.key.scancode == SDL_SCANCODE_3);
+            showStartGameScr = false;
+
+            break;
         }
+
+        level = Level::NONE;
     }
-    return 0;
 }
 
 bool TextureController::isLevelOptionButtonPressed(const SDL_Event& event) {
